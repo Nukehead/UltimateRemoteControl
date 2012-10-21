@@ -32,5 +32,23 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="22dp"
         android:text="@string/setup_button_selectdevice" />
+    
+    <Button
+        android:id="@+id/setup_connect_device_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setup_select_device_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="@string/setup_button_connectdevice" />
+    
+    <TextView
+        android:id="@+id/setup_connect_state_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setup_connect_device_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"/>
+    
 
 </RelativeLayout>

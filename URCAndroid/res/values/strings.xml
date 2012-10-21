@@ -12,5 +12,10 @@
     <string name="setup_label_currentdevice">Current device: %s</string>
     <string name="setup_nodeviceselected">No device selected</string>
     <string name="setup_button_selectdevice">Select device</string>
+    <string name="setup_button_connectdevice">Connect to device</string>
+    <string name="title_activity_device_list">Choose a device</string>
+    <string name="devicelist_paired_devices">Paired devices</string>
+    <string name="setup_device_connected">Device connected!</string>
+    <string name="setup_device_connectionfailed">Device connection failed!</string>
 
 </resources>

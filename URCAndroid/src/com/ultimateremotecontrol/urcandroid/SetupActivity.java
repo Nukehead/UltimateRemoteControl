@@ -83,7 +83,7 @@ public class SetupActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_setup);
 
 		mTopText = (TextView) this
 				.findViewById(R.id.setup_label_top);
@@ -167,17 +167,21 @@ public class SetupActivity extends Activity {
 			mCurrentDevice = mSharedPrefs.getString(PREF_LAST_DEVICE, null);
 		}
 
-		if (mBluetoothAdapter != null && !mBluetoothAdapter.isEnabled()
-				&& mCurrentState != ViewState.BluetoothDisabled) {
-			configureView(ViewState.EnablingBluetooth);
-			URCLog.d("Bluetooth is not enabled, requesting enabled bluetooth.");
-			Intent enableBtIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-		} else if (mBluetoothAdapter.isEnabled()) {
-			configureView(ViewState.ConnectDevice);
+		if (mBluetoothAdapter != null) {
+			if (!mBluetoothAdapter.isEnabled()
+					&& mCurrentState != ViewState.BluetoothDisabled) {
+				configureView(ViewState.EnablingBluetooth);
+				URCLog.d("Bluetooth is not enabled, requesting enabled bluetooth.");
+				Intent enableBtIntent = new Intent(
+						BluetoothAdapter.ACTION_REQUEST_ENABLE);
+				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+			} else if (mBluetoothAdapter.isEnabled()) {
+				configureView(ViewState.ConnectDevice);
+			}
+		} else {
+			configureView(ViewState.BluetoothDisabled);
 		}
-		
+
 		super.onResume();
 	}
 

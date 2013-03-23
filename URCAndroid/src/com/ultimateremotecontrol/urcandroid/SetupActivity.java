@@ -94,7 +94,6 @@ public class SetupActivity extends Activity {
 			public void onClick(View v) {
 				Intent serverIntent = new Intent(v.getContext(), DeviceListActivity.class);
 				startActivityForResult(serverIntent, REQUEST_SELECT_DEVICE);
-				
 			}
 		});
 

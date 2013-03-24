@@ -13,18 +13,18 @@ public class ConnectionHandler {
 	/**
 	 * The interval in which the CommandProvider is queried for a new command.
 	 */
-	private static final int TICK_TIME = 200;
-
-	/**
-	 * The threshold at which tick count a send attempt is treated as error and cancelled. 
-	 */
-	public static final int ErrorThreshold = 3;
+	private static final int TICK_TIME = 100;
 
 	/**
 	 * The threshold at which tick count a send attempt is treated as stalled.
 	 */
-	public static final int WarningThreshold = 2;
-	
+	public static final int WarningThreshold = 1000 / TICK_TIME;
+
+	/**
+	 * The threshold at which tick count a send attempt is treated as error and cancelled. 
+	 */
+	public static final int ErrorThreshold = WarningThreshold + 1;
+
 	
 	private Timer mTickTimer;
 	

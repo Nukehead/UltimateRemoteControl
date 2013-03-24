@@ -70,6 +70,9 @@ public class SetupActivity extends Activity {
 	/** The status text for the connection attempt. */
 	private TextView mConnectStatusText = null;
 
+	/** The drive button. */
+	private Button mDriveButton = null;
+
 	/**
 	 * An enum for the state of the current setup activity. 
 	 */
@@ -102,6 +105,13 @@ public class SetupActivity extends Activity {
 			
 			public void onClick(View v) {
 				connectToDevice();
+			}
+		});
+		
+		mDriveButton = (Button) this.findViewById(R.id.button_drive);
+		mDriveButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				drive();
 			}
 		});
 		
@@ -154,6 +164,11 @@ public class SetupActivity extends Activity {
 		}
 		configureView(ViewState.ConnectedDevice);
 	}
+	
+	protected void drive() {
+		// TODO Auto-generated method stub
+		
+	}	
 
 	@Override
 	protected void onResume() {

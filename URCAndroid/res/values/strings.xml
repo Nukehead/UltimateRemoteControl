@@ -17,5 +17,6 @@
     <string name="devicelist_paired_devices">Paired devices</string>
     <string name="setup_device_connected">Device connected!</string>
     <string name="setup_device_connectionfailed">Device connection failed!</string>
+    <string name="drive">Drive</string>
 
 </resources>

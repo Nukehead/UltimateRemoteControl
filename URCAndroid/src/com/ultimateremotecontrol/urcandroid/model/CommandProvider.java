@@ -1,4 +1,4 @@
-package model;
+package com.ultimateremotecontrol.urcandroid.model;
 
 /**
  * Provides a common storage for the current command.

@@ -1,4 +1,4 @@
-package model;
+package com.ultimateremotecontrol.urcandroid.model;
 
 import java.util.Timer;
 import java.util.TimerTask;

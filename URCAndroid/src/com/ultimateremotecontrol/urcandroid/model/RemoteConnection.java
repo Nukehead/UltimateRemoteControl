@@ -1,4 +1,4 @@
-package model;
+package com.ultimateremotecontrol.urcandroid.model;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -114,7 +114,6 @@ public class RemoteConnection {
 			mCommand = command;
 		}
 
-		@Override
 		public void run() {
 			sendCommand(mCommand);
 		}

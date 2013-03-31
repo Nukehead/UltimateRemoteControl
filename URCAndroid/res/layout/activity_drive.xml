@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".DriveActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal" >
+
+        <ToggleButton
+            android:id="@+id/toggleButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ToggleButton1" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ToggleButton2" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ToggleButton3" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ToggleButton4" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ToggleButton5" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ToggleButton6" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ToggleButton7" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ToggleButton8" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="false" />
+
+    <com.ultimateremotecontrol.urcandroid.ControlStick
+        android:id="@+id/controlStick1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" />
+
+    <ToggleButton
+        android:id="@+id/toggleButtonAccelerometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textViewStatus"
+        android:layout_centerHorizontal="true"
+        android:checked="true"
+        android:text="Use accelerometer" />
+
+</RelativeLayout>

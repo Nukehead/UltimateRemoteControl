@@ -34,6 +34,10 @@ public class ConnectionHandler {
 		mTickTimer.scheduleAtFixedRate(new TickMachine(provider, connection, listener), 0, TICK_TIME);
 	}
 	
+	public void stop() {
+		mTickTimer.cancel();
+	}
+	
 	private class TickMachine extends TimerTask {
 		private CommandProvider mProvider;
 		private RemoteConnection mConnection;
@@ -54,7 +58,7 @@ public class ConnectionHandler {
 		State mState = State.Start;
 		
 		@Override
-		public void run() {
+		public void run() {			
 			State currentState = mState;
 			switch (mState) {
 			case Start:
@@ -94,7 +98,7 @@ public class ConnectionHandler {
 				
 			}
 			
-			if (currentState != mState) {
+			if (currentState != mState && mListener != null) {
 				mListener.onStateChanged(mState);
 			}
 				

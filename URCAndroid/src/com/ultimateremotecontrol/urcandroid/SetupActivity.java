@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.ultimateremotecontrol.urcandroid.model.ConnectionHandler;
+
 /**
  * The activity to enable bluetooth and connect to a selected device. 
  *
@@ -35,8 +37,11 @@ public class SetupActivity extends Activity {
 	/** The name of the last used device preferences identifier. */
 	private static final String PREF_LAST_DEVICE = "URC_LAST_DEVICE";
 	
+	/** The name of the intent extra for the device adress to connect to. */
+	public static final String INTENT_EXTRA_DEVICE_ADDRESS = "URC_DEVICE_ADDRESS";
+	
 	/** The UUID for the bluetooth service to connect to. */
-	private static final UUID URC_UUID = UUID.fromString("508ca308-1b94-11e2-892e-0800200c9a66");
+	public static final UUID URC_UUID = UUID.fromString("508ca308-1b94-11e2-892e-0800200c9a66");
 
 	
 	/** The bluetooth adapter to use. */
@@ -72,6 +77,8 @@ public class SetupActivity extends Activity {
 
 	/** The drive button. */
 	private Button mDriveButton = null;
+
+	private ConnectionHandler mConnectionHandler;
 
 	/**
 	 * An enum for the state of the current setup activity. 
@@ -117,7 +124,7 @@ public class SetupActivity extends Activity {
 		
 		mConnectStatusText = (TextView) this.findViewById(R.id.setup_connect_state_label);
 		
-		configureView(ViewState.EnablingBluetooth);
+		configureView(ViewState.ConnectedDevice);
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
@@ -151,23 +158,32 @@ public class SetupActivity extends Activity {
 					socket.connect();
 					OutputStream out = socket.getOutputStream();
 					InputStream in = socket.getInputStream();
-					URCLog.d("Connection successful, writing string.");
-					out.write(new String("X128;Y129;Z130;A127;B126;C125;D124;E123;F122;G1;H0;I1;J0;K1").getBytes("UTF-8"));
-					in.read();
+					URCLog.d("Connection successful, writing test string.");
+					out.write(new String("?\n").getBytes("US-ASCII"));
+					byte[] inBuffer = new byte[12];
+					int bytesRead = in.read(inBuffer);
+					if (bytesRead > 0) {
+						URCLog.d("Received something.");
+						String response = new String(inBuffer, "US-ASCII");
+						if (response.contains("!")) {
+							URCLog.d("Good response received. Device is ok.");
+							mConnectStatusText.setText(R.string.setup_device_connected);
+							configureView(ViewState.ConnectedDevice);
+						}
+					}
 					URCLog.d("Closing connection.");
 					socket.close();
-					mConnectStatusText.setText(R.string.setup_device_connected);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		configureView(ViewState.ConnectedDevice);
 	}
 	
 	protected void drive() {
-		// TODO Auto-generated method stub
-		
+		Intent driveIntent = new Intent(this, DriveActivity.class);
+		driveIntent.putExtra(INTENT_EXTRA_DEVICE_ADDRESS, mCurrentDevice);
+		startActivity(driveIntent);
 	}	
 
 	@Override

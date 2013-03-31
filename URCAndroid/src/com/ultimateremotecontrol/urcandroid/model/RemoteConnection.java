@@ -63,44 +63,45 @@ public class RemoteConnection {
 	 * exploded.
 	 */
 	private boolean waitForReady() {
-		try {
-			// Sending is done, now we need to receive.
-			// We wait until the response from the other side arrives or someone cancels
-			boolean foundIt = false;
-			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-			while (!foundIt && !mCancel) {
-				// Read from input until we're done.
-				int probablyAvailable = mIn.available();
-				byte[] probableBuffer = new byte[probablyAvailable];
-				mIn.read(probableBuffer);
-				for(int i=0; i<probableBuffer.length; ++i) {
-					 byte b = probableBuffer[i];
-					 if (b == EOM) {
-						 // We found it.
-						 buffer.write(probableBuffer, 0, i);
-						 foundIt = true;
-						 break;
-					 }
-						 
-				}
-				
-				// The input stream did not contain the byte we were looking for.
-				// Store it in the buffer.
-				if (!foundIt) {
-					buffer.write(probableBuffer);
-				}
-			}
-			
-			if (foundIt) {
-				return true;
-			}
-			
-		} catch(IOException io) {
-			// Something went wrong during receiving.
-			URCLog.d("RemoteConnection", "Exception during waitForReady:\n" + io.getMessage());
-		}
-		
-		return false;
+		return true;
+//		try {
+//			// Sending is done, now we need to receive.
+//			// We wait until the response from the other side arrives or someone cancels
+//			boolean foundIt = false;
+//			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//			while (!foundIt && !mCancel) {
+//				// Read from input until we're done.
+//				int probablyAvailable = mIn.available();
+//				byte[] probableBuffer = new byte[probablyAvailable];
+//				mIn.read(probableBuffer);
+//				for(int i=0; i<probableBuffer.length; ++i) {
+//					 byte b = probableBuffer[i];
+//					 if (b == EOM) {
+//						 // We found it.
+//						 buffer.write(probableBuffer, 0, i);
+//						 foundIt = true;
+//						 break;
+//					 }
+//						 
+//				}
+//				
+//				// The input stream did not contain the byte we were looking for.
+//				// Store it in the buffer.
+//				if (!foundIt) {
+//					buffer.write(probableBuffer);
+//				}
+//			}
+//			
+//			if (foundIt) {
+//				return true;
+//			}
+//			
+//		} catch(IOException io) {
+//			// Something went wrong during receiving.
+//			URCLog.d("RemoteConnection", "Exception during waitForReady:\n" + io.getMessage());
+//		}
+//		
+//		return false;
 	}
 	
 	public void sendCommandAsync(Command command) {

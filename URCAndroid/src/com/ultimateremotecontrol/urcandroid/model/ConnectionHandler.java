@@ -28,7 +28,7 @@ public class ConnectionHandler {
 	
 	private Timer mTickTimer;
 	
-	public ConnectionHandler(RemoteConnection connection, CommandProvider provider, TickStatusListener listener)
+	public ConnectionHandler(IRemoteConnection connection, CommandProvider provider, TickStatusListener listener)
 	{
 		mTickTimer = new Timer();
 		mTickTimer.scheduleAtFixedRate(new TickMachine(provider, connection, listener), 0, TICK_TIME);
@@ -40,12 +40,12 @@ public class ConnectionHandler {
 	
 	private class TickMachine extends TimerTask {
 		private CommandProvider mProvider;
-		private RemoteConnection mConnection;
+		private IRemoteConnection mConnection;
 		private Command mLastCommand;
 		private int mSendTickCount;
 		private TickStatusListener mListener;
 		
-		public TickMachine(CommandProvider provider, RemoteConnection connection, TickStatusListener listener) {
+		public TickMachine(CommandProvider provider, IRemoteConnection connection, TickStatusListener listener) {
 			mProvider = provider;
 			mConnection = connection;
 			mListener = listener;

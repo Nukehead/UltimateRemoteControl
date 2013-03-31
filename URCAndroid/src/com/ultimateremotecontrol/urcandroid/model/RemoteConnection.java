@@ -10,7 +10,7 @@ import com.ultimateremotecontrol.urcandroid.URCLog;
 /**
  * A connection to a remote device. Consumes commands and sends them to the device.
  */
-public class RemoteConnection {
+public class RemoteConnection implements IRemoteConnection {
 	private static final byte EOM = '!';
 	private InputStream mIn;
 	private OutputStream mOut;

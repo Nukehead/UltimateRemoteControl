@@ -13,7 +13,7 @@ public class CommandProvider {
 	}
 	
 	public static CommandProvider getCommandProvider() {
-		if (mProvider != null) {
+		if (mProvider == null) {
 			mProvider = new CommandProvider();
 		}
 		

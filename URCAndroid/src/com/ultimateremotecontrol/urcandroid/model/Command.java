@@ -42,14 +42,7 @@ public class Command implements Comparable<Command> {
 	
 	public byte[] toByte()
 	{
-		StringBuffer resultBuffer = new StringBuffer();
-		for (String key : mValues.keySet()) {
-			resultBuffer.append(key);
-			resultBuffer.append(mValues.get(key));
-			resultBuffer.append(';');
-		}
-		resultBuffer.append('\n');
-		String result = resultBuffer.toString();
+		String result = toString();
 		byte[] bytes = null;
 		try {
 			bytes = result.getBytes("US-ASCII");
@@ -58,6 +51,18 @@ public class Command implements Comparable<Command> {
 		}
 		
 		return bytes;
+	}
+
+	public String toString() {
+		StringBuffer resultBuffer = new StringBuffer();
+		for (String key : mValues.keySet()) {
+			resultBuffer.append(key);
+			resultBuffer.append(mValues.get(key));
+			resultBuffer.append(';');
+		}
+		resultBuffer.append('\n');
+		String result = resultBuffer.toString();
+		return result;
 	}
 	
 	public byte[] toDiffByte(Command diff) {

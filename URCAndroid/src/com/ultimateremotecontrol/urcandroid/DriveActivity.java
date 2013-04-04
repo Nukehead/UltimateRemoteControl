@@ -176,10 +176,10 @@ public class DriveActivity extends Activity implements SensorEventListener, OnCh
 		boolean b3 = ((ToggleButton)findViewById(R.id.toggleButton3)).isChecked();
 		boolean b4 = ((ToggleButton)findViewById(R.id.toggleButton4)).isChecked();
 		boolean b5 = ((ToggleButton)findViewById(R.id.toggleButton5)).isChecked();
-//		boolean b6 = ((ToggleButton)findViewById(R.id.toggleButton6)).isChecked();
-//		boolean b7 = ((ToggleButton)findViewById(R.id.toggleButton7)).isChecked();
-//		boolean b8 = ((ToggleButton)findViewById(R.id.toggleButton8)).isChecked();
-		CommandProvider.getCommandProvider().setCurrentCommand(new Command(X, Y, 0, 0, 0, 0, 0, 0, 0, b1, b2, b3, b4, b5));
+		boolean b6 = ((ToggleButton)findViewById(R.id.toggleButton6)).isChecked();
+		boolean b7 = ((ToggleButton)findViewById(R.id.toggleButton7)).isChecked();
+		boolean b8 = ((ToggleButton)findViewById(R.id.toggleButton8)).isChecked();
+		CommandProvider.getCommandProvider().setCurrentCommand(new Command(X, Y, 0, 0, 0, 0, 0, 0, 0, b1, b2, b3, b4, b5, b6, b7, b8));
 				
 		
 	}

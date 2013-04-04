@@ -63,7 +63,7 @@ public class ArduinoMock {
 					e.printStackTrace();
 				}
 			}
-		}.run();
+		}.start();
 	}
 	
 	public void stop() {
@@ -72,23 +72,24 @@ public class ArduinoMock {
 
 	private void loop() throws InterruptedException, UnsupportedEncodingException, IOException {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		while (!mStop) {
+		boolean endOfStream = false;
+		while (!mStop && !endOfStream) {
 			Thread.sleep(100);
 
-			// Read from input until we're done.
-			if (mIn.available() > 0) {
+			// Read from input until we're done or there's nothing to read.
+			while (mIn.available() > 0 && !endOfStream) {
 				int value = mIn.read();
 				if (value == -1 ) {
 					// The end of the stream has been reached. Exit
-					break;
-				}
-				
-				buffer.write(value);
-				if (value == EOM) {
-					String message = new String(buffer.toByteArray(), "US-ASCII");
-					mReceivedMessages.add(message);
-					wait(mDelay);
-					mOut.write(new byte[] {'!', '\n'});
+					endOfStream = true;
+				} else {
+					buffer.write(value);
+					if (value == EOM) {
+						String message = new String(buffer.toByteArray(), "US-ASCII");
+						mReceivedMessages.add(message);
+						Thread.sleep(mDelay);
+						mOut.write(new byte[] {'!', '\n'});
+					}
 				}
 			}
 		}

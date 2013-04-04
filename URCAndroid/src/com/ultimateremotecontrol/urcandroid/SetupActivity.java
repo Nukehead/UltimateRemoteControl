@@ -78,8 +78,6 @@ public class SetupActivity extends Activity {
 	/** The drive button. */
 	private Button mDriveButton = null;
 
-	private ConnectionHandler mConnectionHandler;
-
 	/**
 	 * An enum for the state of the current setup activity. 
 	 */

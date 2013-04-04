@@ -41,7 +41,7 @@ public class ConnectionHandlerTest extends TestCase implements TickStatusListene
 	}
 	
 	public void testSingleCommand() throws Exception {
-		Command command = new Command(0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false);
+		Command command = new Command(0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, false, false, false);
 		mRemoteConnection.setResults(new boolean[] {true}, new int[] {250});
 		CommandProvider.getCommandProvider().setCurrentCommand(command);
 		WaitForResults(1);

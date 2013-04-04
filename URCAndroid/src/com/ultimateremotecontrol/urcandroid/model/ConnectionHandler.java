@@ -3,7 +3,15 @@ package com.ultimateremotecontrol.urcandroid.model;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Handles the delicate balance between remote connection, current command and the status listener.  
+ *
+ */
 public class ConnectionHandler {
+	
+	/**
+	 * The states of the currently sent command. 
+	 */
 	public enum State {
 		Start,
 		CommandSent,

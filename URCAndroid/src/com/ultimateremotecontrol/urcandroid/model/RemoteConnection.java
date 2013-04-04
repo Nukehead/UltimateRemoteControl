@@ -15,7 +15,7 @@ public class RemoteConnection implements IRemoteConnection {
 	private InputStream mIn;
 	private OutputStream mOut;
 	private boolean mCancel;
-	private boolean mLastAttempt = false;
+	private boolean mLastAttempt = true;
 	
 	public RemoteConnection(InputStream in, OutputStream out) {
 		mIn = in;
@@ -71,23 +71,31 @@ public class RemoteConnection implements IRemoteConnection {
 			while (!foundIt && !mCancel) {
 				// Read from input until we're done.
 				int probablyAvailable = mIn.available();
-				byte[] probableBuffer = new byte[probablyAvailable];
-				mIn.read(probableBuffer);
-				for(int i=0; i<probableBuffer.length; ++i) {
-					 byte b = probableBuffer[i];
-					 if (b == EOM) {
-						 // We found it.
-						 buffer.write(probableBuffer, 0, i);
-						 foundIt = true;
-						 break;
-					 }
-						 
-				}
-				
-				// The input stream did not contain the byte we were looking for.
-				// Store it in the buffer.
-				if (!foundIt) {
-					buffer.write(probableBuffer);
+				if (probablyAvailable > 0) {
+					byte[] probableBuffer = new byte[probablyAvailable];
+					mIn.read(probableBuffer);
+					for(int i=0; i<probableBuffer.length; ++i) {
+						 byte b = probableBuffer[i];
+						 if (b == EOM) {
+							 // We found it.
+							 buffer.write(probableBuffer, 0, i);
+							 foundIt = true;
+							 break;
+						 }
+							 
+					}
+					
+					// The input stream did not contain the byte we were looking for.
+					// Store it in the buffer.
+					if (!foundIt) {
+						buffer.write(probableBuffer);
+					}
+				} else {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			

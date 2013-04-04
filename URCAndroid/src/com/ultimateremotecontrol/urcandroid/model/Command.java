@@ -9,7 +9,27 @@ public class Command implements Comparable<Command> {
 	
 	private LinkedHashMap<String, String> mValues;
 	
-	public Command(int X, int Y, int Z, int A, int B, int C, int D, int E, int F, boolean G, boolean H, boolean I, boolean J, boolean K) {
+	/**
+	 * Creates a new Command object with the given values.
+	 * @param X Position sensor X
+	 * @param Y Position sensor Y
+	 * @param Z Position sensor Z
+	 * @param A X coordinates of the left controller
+	 * @param B Y coordinates of the left controller
+	 * @param C X coordinates of the right controller
+	 * @param D Y coordinates of the right controller
+	 * @param E value of slider 1
+	 * @param F value of slider 2
+	 * @param G Toggle switch 1
+	 * @param H Toggle switch 2
+	 * @param I Toggle switch 3
+	 * @param J Toggle switch 4
+	 * @param K Toggle switch 5
+	 * @param L Toggle switch 6
+	 * @param M Toggle switch 7
+	 * @param N Toggle switch 8
+	 */
+	public Command(int X, int Y, int Z, int A, int B, int C, int D, int E, int F, boolean G, boolean H, boolean I, boolean J, boolean K, boolean L, boolean M, boolean N) {
 		mValues = new LinkedHashMap<String, String>();
 		mValues.put("X", String.valueOf(normalize(X)));
 		mValues.put("Y", String.valueOf(normalize(Y)));
@@ -25,6 +45,9 @@ public class Command implements Comparable<Command> {
 		mValues.put("I", I ? "1" : "0");
 		mValues.put("J", J ? "1" : "0");
 		mValues.put("K", K ? "1" : "0");
+		mValues.put("L", L ? "1" : "0");
+		mValues.put("M", M ? "1" : "0");
+		mValues.put("N", N ? "1" : "0");
 		}
 
  	private short normalize(int x) {
@@ -33,13 +56,32 @@ public class Command implements Comparable<Command> {
 		return (short)lower;
 	}
 
+ 	/**
+ 	 * Compare to another Command.
+ 	 * @param another The other Command to compare to.
+ 	 * @returns Returns 0 if the command is identical to the other or equal to the other. 1 if not.
+ 	 */
 	public int compareTo(Command another) {
 		if (this == another) {
 			return 0;
 		}
-		return 0;
+		
+		if (another == null) {
+			return 1;
+		}
+		
+		if (this.toString().compareTo(another.toString()) == 0) {
+			return 0;
+		}
+		
+		return 1;
 	}
 	
+	
+	/**
+	 * Converts the command to a byte Array encoding the result of toString to bytes using ASCII.
+	 * @return Bytes using ASCII encoding of the toString result. Null of the conversion fails.
+	 */
 	public byte[] toByte()
 	{
 		String result = toString();

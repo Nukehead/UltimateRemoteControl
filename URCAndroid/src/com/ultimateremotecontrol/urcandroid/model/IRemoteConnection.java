@@ -20,5 +20,10 @@ public interface IRemoteConnection {
 	 * Cancels sending the current command.
 	 */
 	public void cancelCurrentCommand();
+	/**
+	 * Returns the last sent Command.
+	 * @return Returns the last sent Command.
+	 */
+	public Command getLastSentCommand();
 	
 }

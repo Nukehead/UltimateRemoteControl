@@ -5,8 +5,15 @@ import java.util.LinkedHashMap;
 
 import com.ultimateremotecontrol.urcandroid.URCLog;
 
+
+/**
+ * Stores the values representing the current settings of the remote control.
+ * It features functions to convert the values into human readable strings and also
+ * into byte arrays to transfer to a remote client.
+ */
 public class Command implements Comparable<Command> {
 	
+	public static final String ENCODING = "US-ASCII";
 	private LinkedHashMap<String, String> mValues;
 	
 	/**
@@ -87,7 +94,7 @@ public class Command implements Comparable<Command> {
 		String result = toString();
 		byte[] bytes = null;
 		try {
-			bytes = result.getBytes("US-ASCII");
+			bytes = result.getBytes(ENCODING);
 		} catch (UnsupportedEncodingException enc) {
 			URCLog.d("No US-ASCII encoding available.");
 		}
@@ -107,6 +114,12 @@ public class Command implements Comparable<Command> {
 		return result;
 	}
 	
+	/**
+	 * Generates a byte[] which is the difference between the Command diff
+	 * and this.
+	 * @param diff The Command to diff from.
+	 * @return The difference between diff and this.
+	 */
 	public byte[] toDiffByte(Command diff) {
 		StringBuffer resultBuffer = new StringBuffer();
 		for (String key : mValues.keySet()) {
@@ -122,7 +135,7 @@ public class Command implements Comparable<Command> {
 		String result = resultBuffer.toString();
 		byte[] bytes = null;
 		try {
-			bytes = result.getBytes("US-ASCII");
+			bytes = result.getBytes(ENCODING);
 		} catch (UnsupportedEncodingException enc) {
 			URCLog.d("No US-ASCII encoding available.");
 		}

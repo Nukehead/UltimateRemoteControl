@@ -16,6 +16,7 @@ public class RemoteConnection implements IRemoteConnection {
 	private OutputStream mOut;
 	private boolean mCancel;
 	private boolean mLastAttempt = true;
+	private Command mLastSentCommand = null;
 	
 	public RemoteConnection(InputStream in, OutputStream out) {
 		mIn = in;
@@ -51,6 +52,7 @@ public class RemoteConnection implements IRemoteConnection {
 			}
 			
 			mLastAttempt = waitForReady();
+			mLastSentCommand = command;
 		}
 			
 		return mLastAttempt;
@@ -130,5 +132,9 @@ public class RemoteConnection implements IRemoteConnection {
 	
 	public void cancelCurrentCommand() {
 		mCancel = true;
+	}
+
+	public Command getLastSentCommand() {
+		return mLastSentCommand;
 	}
 }

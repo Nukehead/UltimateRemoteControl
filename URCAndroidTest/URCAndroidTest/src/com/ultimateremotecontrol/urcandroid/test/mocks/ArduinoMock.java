@@ -9,6 +9,8 @@ import java.io.PipedOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
+import com.ultimateremotecontrol.urcandroid.model.Command;
+
 public class ArduinoMock {
 
 	private static final byte EOM = '\n';
@@ -85,7 +87,7 @@ public class ArduinoMock {
 				} else {
 					buffer.write(value);
 					if (value == EOM) {
-						String message = new String(buffer.toByteArray(), "US-ASCII");
+						String message = new String(buffer.toByteArray(), Command.ENCODING);
 						mReceivedMessages.add(message);
 						Thread.sleep(mDelay);
 						mOut.write(new byte[] {'!', '\n'});

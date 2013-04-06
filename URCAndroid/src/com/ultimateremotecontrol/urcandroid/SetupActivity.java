@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.ultimateremotecontrol.urcandroid.model.ConnectionHandler;
+import com.ultimateremotecontrol.urcandroid.model.Command;
 
 /**
  * The activity to enable bluetooth and connect to a selected device. 
@@ -157,12 +157,12 @@ public class SetupActivity extends Activity {
 					OutputStream out = socket.getOutputStream();
 					InputStream in = socket.getInputStream();
 					URCLog.d("Connection successful, writing test string.");
-					out.write(new String("?\n").getBytes("US-ASCII"));
+					out.write(new String("?\n").getBytes(Command.ENCODING));
 					byte[] inBuffer = new byte[12];
 					int bytesRead = in.read(inBuffer);
 					if (bytesRead > 0) {
 						URCLog.d("Received something.");
-						String response = new String(inBuffer, "US-ASCII");
+						String response = new String(inBuffer,Command.ENCODING);
 						if (response.contains("!")) {
 							URCLog.d("Good response received. Device is ok.");
 							mConnectStatusText.setText(R.string.setup_device_connected);

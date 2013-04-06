@@ -3,6 +3,8 @@ package com.ultimateremotecontrol.urcandroid.test.mocks;
 import java.util.List;
 import java.util.Vector;
 
+import android.util.Log;
+
 import com.ultimateremotecontrol.urcandroid.model.Command;
 import com.ultimateremotecontrol.urcandroid.model.IRemoteConnection;
 
@@ -11,6 +13,7 @@ public class RemoteConnectionMock implements IRemoteConnection {
 	private boolean[] mResults;
 	private int[] mDelays;
 	private List<Command> mCommands = new Vector<Command>();
+	private Command mLastSentCommand = null;
 	
 
 	public void setResults(boolean[] results, int[] delays) {
@@ -26,24 +29,33 @@ public class RemoteConnectionMock implements IRemoteConnection {
 	public boolean sendCommand(Command command) {
 		mCommands.add(command);
 		int commandNumber = mCommands.size();
-		try {
-			wait(mDelays[commandNumber]);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (commandNumber <= mDelays.length) {
+			try {
+				Thread.sleep(mDelays[commandNumber-1]);
+				mLastSentCommand = command;
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return mResults[commandNumber-1];
 		}
-		// TODO Auto-generated method stub
-		return mResults[commandNumber];
+		return true;
 	}
 
-	public void sendCommandAsync(Command command) {
-		// TODO Auto-generated method stub
-		
+	public void sendCommandAsync(final Command command) {
+		new Thread() {
+			@Override
+			public void run() {
+				sendCommand(command);
+				super.run();
+			}
+		}.start();
 	}
 
 	public void cancelCurrentCommand() {
-		// TODO Auto-generated method stub
-		
+	}
+
+	public Command getLastSentCommand() {
+		return mLastSentCommand;
 	}
 
 }

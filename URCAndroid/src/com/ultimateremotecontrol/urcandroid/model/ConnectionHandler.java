@@ -3,6 +3,8 @@ package com.ultimateremotecontrol.urcandroid.model;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.ultimateremotecontrol.urcandroid.URCLog;
+
 /**
  * Handles the delicate balance between remote connection, current command and the status listener.  
  *
@@ -16,22 +18,23 @@ public class ConnectionHandler {
 		Start,
 		CommandSent,
 		WaitingWarning,
+		Error
 	}
 	
 	/**
-	 * The interval in which the CommandProvider is queried for a new command.
+	 * The interval in which the ConnectionHandler updates its status.
 	 */
-	private static final int TICK_TIME = 100;
+	public static final int TICK_TIME = 100;
 
 	/**
 	 * The threshold at which tick count a send attempt is treated as stalled.
 	 */
-	public static final int WarningThreshold = 1000 / TICK_TIME;
+	public static final int WarningThreshold = 10;
 
 	/**
 	 * The threshold at which tick count a send attempt is treated as error and cancelled. 
 	 */
-	public static final int ErrorThreshold = WarningThreshold + 1;
+	public static final int ErrorThreshold = 11;
 
 	
 	private Timer mTickTimer;
@@ -50,6 +53,7 @@ public class ConnectionHandler {
 		private CommandProvider mProvider;
 		private IRemoteConnection mConnection;
 		private Command mLastCommand;
+		private Command mCurrentCommand;
 		private int mSendTickCount;
 		private TickStatusListener mListener;
 		
@@ -73,11 +77,13 @@ public class ConnectionHandler {
 				// Fetch a command.
 				Command nextCommand = mProvider.getCurrentCommand();
 				if (nextCommand != null) {
-					if (nextCommand == mLastCommand) {
+					++mSendTickCount;
+					if (nextCommand.compareTo(mLastCommand) == 0) {
 						// Thank you, we're done.
 					} else {
 						mSendTickCount = 0;
 						mConnection.sendCommandAsync(nextCommand);
+						mCurrentCommand = nextCommand;
 						mState = State.CommandSent;
 					}
 				}
@@ -85,16 +91,20 @@ public class ConnectionHandler {
 			
 			case CommandSent:
 			case WaitingWarning:
+				++mSendTickCount;
 				// We have a command sent to the connection.
-				// Did we receive a result?
-				// TODO: Check for result.
-				String result = null;
-				
-				if (result == null) {
-				
+				// Was it transmitted successfully?
+				Command lastSentCommand = mConnection.getLastSentCommand();
+				if (mCurrentCommand == lastSentCommand) {
+					// Success
+					mLastCommand = mCurrentCommand;
+					mCurrentCommand = null;
+					mState = State.Start;
+				} else {
+					// Not done transmitting. Check if we've been waiting for too long.
 					if (mSendTickCount == ErrorThreshold) {
 						mConnection.cancelCurrentCommand();
-						mState = State.Start;
+						mState = State.Error;
 					} else if (mSendTickCount >= WarningThreshold) {
 						mState = State.WaitingWarning;
 					}
@@ -103,17 +113,17 @@ public class ConnectionHandler {
 				
 			default:
 				// Procrastinate :)
-				
 			}
 			
 			if (currentState != mState && mListener != null) {
+				URCLog.d(String.format("State changed to %s", mState.toString()));
 				mListener.onStateChanged(mState);
+				if (mState == State.Error) {
+					mState = State.Start;
+					URCLog.d(String.format("State changed to %s", mState.toString()));
+					mListener.onStateChanged(mState);
+				}
 			}
-				
-			
 		}
-		
-		
-		
 	}
 }

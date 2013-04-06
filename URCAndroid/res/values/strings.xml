@@ -29,4 +29,5 @@
     <string name="ToggleButton6">6</string>
     <string name="ToggleButton7">7</string>
     <string name="ToggleButton8">8</string>
+    <string name="UseAccelerometer">Use accelerometer</string>
 </resources>

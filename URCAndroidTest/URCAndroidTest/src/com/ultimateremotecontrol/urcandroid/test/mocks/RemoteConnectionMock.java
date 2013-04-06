@@ -3,8 +3,6 @@ package com.ultimateremotecontrol.urcandroid.test.mocks;
 import java.util.List;
 import java.util.Vector;
 
-import android.util.Log;
-
 import com.ultimateremotecontrol.urcandroid.model.Command;
 import com.ultimateremotecontrol.urcandroid.model.IRemoteConnection;
 

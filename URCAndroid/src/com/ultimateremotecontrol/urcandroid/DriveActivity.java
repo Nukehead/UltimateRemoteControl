@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.ultimateremotecontrol.urcandroid.gui.VerticalSeekBar;
 import com.ultimateremotecontrol.urcandroid.model.Command;
 import com.ultimateremotecontrol.urcandroid.model.CommandProvider;
 import com.ultimateremotecontrol.urcandroid.model.ConnectionHandler;
@@ -22,13 +23,15 @@ import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.ToggleButton;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;	
 
-public class DriveActivity extends Activity implements SensorEventListener, OnCheckedChangeListener, TickStatusListener {
+public class DriveActivity extends Activity implements SensorEventListener, OnCheckedChangeListener, TickStatusListener, OnSeekBarChangeListener {
 
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
@@ -36,8 +39,12 @@ public class DriveActivity extends Activity implements SensorEventListener, OnCh
 	private WindowManager mWindowManager;
 	private int mX;
 	private int mY;
+	private int mZ;
+	private int mE;
+	private int mF;
 	private ConnectionHandler mConnectionHandler;
 	private BluetoothSocket mSocket;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,17 @@ public class DriveActivity extends Activity implements SensorEventListener, OnCh
 		((ToggleButton)findViewById(R.id.toggleButton3)).setOnCheckedChangeListener(this);
 		((ToggleButton)findViewById(R.id.toggleButton4)).setOnCheckedChangeListener(this);
 		((ToggleButton)findViewById(R.id.toggleButton5)).setOnCheckedChangeListener(this);
+		((ToggleButton)findViewById(R.id.toggleButton6)).setOnCheckedChangeListener(this);
+		((ToggleButton)findViewById(R.id.toggleButton7)).setOnCheckedChangeListener(this);
+		((ToggleButton)findViewById(R.id.toggleButton8)).setOnCheckedChangeListener(this);
+		
+		VerticalSeekBar leftBar = (VerticalSeekBar)findViewById(R.id.seekBarLeft);
+		leftBar.setOnSeekBarChangeListener(this);
+		VerticalSeekBar rightBar = (VerticalSeekBar)findViewById(R.id.seekBarRight);
+		rightBar.setOnSeekBarChangeListener(this);		
+		if (useAccelerometer.isChecked()) {
+			useAccelerometer();
+		}
 	}
 
 	@Override
@@ -77,7 +95,6 @@ public class DriveActivity extends Activity implements SensorEventListener, OnCh
 					InputStream in = mSocket.getInputStream();		
 			
 					mConnectionHandler = new ConnectionHandler(new RemoteConnection(in,  out), CommandProvider.getCommandProvider(), this);
-					
 					
 				} catch (IOException io) {
 					io.printStackTrace();
@@ -113,7 +130,6 @@ public class DriveActivity extends Activity implements SensorEventListener, OnCh
 	}
 
 	public void onAccuracyChanged(int arg0, int arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -124,29 +140,35 @@ public class DriveActivity extends Activity implements SensorEventListener, OnCh
   
         float X = 0;
         float Y = 0;
+        float Z = 0;
 
         switch (mDisplay.getRotation()) {
             case Surface.ROTATION_0:
                 X = event.values[0];
                 Y = event.values[1];
+                Z = event.values[2];
                 break;
             case Surface.ROTATION_90:
                 X = -event.values[1];
                 Y = event.values[0];
+                Z = event.values[2];
                 break;
             case Surface.ROTATION_180:
                 X = -event.values[0];
                 Y = -event.values[1];
+                Z = event.values[2];
                 break;
             case Surface.ROTATION_270:
                 X = event.values[1];
                 Y = -event.values[0];
+                Z = event.values[2];
                 break;
         }
-        mX = (int)((X+10)/20)*255;
-        mY = (int)((Y+10)/20)*255;
+        mX = Math.round(((X+10.0f)/20.0f)*255);
+        mY = Math.round(((Y+10.0f)/20.0f)*255);
+        mZ = Math.round(((Z+10.0f)/20.0f)*255);
         
-        URCLog.d(String.format("X: %f Y: %f mX: %d mY %d", X, Y, mX, mY));
+        //URCLog.d(String.format("X: %f Y: %f Z: %f mX: %d mY %d mZ %d", X, Y, Z, mX, mY, mZ));
         setCommand();
 	}
 
@@ -167,10 +189,18 @@ public class DriveActivity extends Activity implements SensorEventListener, OnCh
 		}
 		setCommand();
 	}
+
+	public void onStateChanged(State state) {
+		// TODO: StateChangeListener thingie
+	}
+	
 	
 	private void setCommand() {
 		int X = mX;
 		int Y = mY;
+		int Z = mZ;
+		int E = mE;
+		int F = mF;
 		boolean b1 = ((ToggleButton)findViewById(R.id.toggleButton1)).isChecked();
 		boolean b2 = ((ToggleButton)findViewById(R.id.toggleButton2)).isChecked();
 		boolean b3 = ((ToggleButton)findViewById(R.id.toggleButton3)).isChecked();
@@ -179,13 +209,22 @@ public class DriveActivity extends Activity implements SensorEventListener, OnCh
 		boolean b6 = ((ToggleButton)findViewById(R.id.toggleButton6)).isChecked();
 		boolean b7 = ((ToggleButton)findViewById(R.id.toggleButton7)).isChecked();
 		boolean b8 = ((ToggleButton)findViewById(R.id.toggleButton8)).isChecked();
-		CommandProvider.getCommandProvider().setCurrentCommand(new Command(X, Y, 0, 0, 0, 0, 0, 0, 0, b1, b2, b3, b4, b5, b6, b7, b8));
-				
-		
+		CommandProvider.getCommandProvider().setCurrentCommand(new Command(X, Y, Z, 0, 0, 0, 0, E, F, b1, b2, b3, b4, b5, b6, b7, b8));
 	}
 
-	public void onStateChanged(State state) {
-		// TODO Auto-generated method stub
-		
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		int value = (int) (progress * 2.55);
+		if (seekBar.getId() == R.id.seekBarLeft) {
+			mE = value;
+		} else {
+			mF = value;
+		}
 	}
+
+	public void onStartTrackingTouch(SeekBar seekBar) {
+	}
+
+	public void onStopTrackingTouch(SeekBar seekBar) {
+	}
+
 }

@@ -9,6 +9,7 @@
     tools:context=".DriveActivity" >
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -73,20 +74,29 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="false" />
 
-    <com.ultimateremotecontrol.urcandroid.ControlStick
-        android:id="@+id/controlStick1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
-
     <ToggleButton
         android:id="@+id/toggleButtonAccelerometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textViewStatus"
         android:layout_centerHorizontal="true"
-        android:checked="true"
-        android:text="Use accelerometer" />
+        android:checked="false"
+        android:text="@string/UseAccelerometer" />
 
+    <com.ultimateremotecontrol.urcandroid.gui.VerticalSeekBar
+        android:id="@+id/seekBarLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_toLeftOf="@+id/toggleButtonAccelerometer" />
+
+    <com.ultimateremotecontrol.urcandroid.gui.VerticalSeekBar
+        android:id="@+id/seekBarRight"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_toRightOf="@+id/toggleButtonAccelerometer" />    
+    
 </RelativeLayout>
